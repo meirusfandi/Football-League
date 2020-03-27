@@ -8,15 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import id.fanslab.footballleague.R
 import id.fanslab.footballleague.core.models.LeagueModel
-import id.fanslab.footballleague.ui.MainActivity
+import id.fanslab.footballleague.ui.ListUI
 import kotlinx.android.extensions.LayoutContainer
 import org.jetbrains.anko.AnkoContext
 
-class LeagueAdapter(private val leagueModels: List<LeagueModel>, private val listener: (LeagueModel) -> Unit):
+class LeagueAdapter(private val leagueModels: List<LeagueModel>, private var listener: (LeagueModel) -> Unit):
     RecyclerView.Adapter<LeagueAdapter.LeagueHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : LeagueHolder = LeagueHolder(
-        MainActivity.ListUI().createView(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = LeagueHolder(
+        ListUI().createView(
             AnkoContext.create(parent.context, parent)
         )
     )
@@ -33,9 +33,10 @@ class LeagueAdapter(private val leagueModels: List<LeagueModel>, private val lis
 
         fun bindItem(leagueModel: LeagueModel, listener: (LeagueModel) -> Unit) {
 
+            name.text = leagueModel.leagueName
+            leagueModel.leaguePoster?.let { Picasso.get().load(it).into(poster) }
+
             containerView.setOnClickListener {
-                name.text = leagueModel.leagueName
-                leagueModel.leaguePoster?.let { Picasso.get().load(it).into(poster) }
                 listener(leagueModel)
             }
 
